@@ -1,0 +1,12 @@
+*.obj
+*.xml
+*.enc
+*.log
+*.tlog
+*.lastbuildstate
+*.idb
+*.pdb
+*.filters
+*.user
+*.vcxproj
+*.bin
