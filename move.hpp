@@ -5,86 +5,86 @@
 #include"piece.hpp"
 
 enum MoveConst {
-	//0000 0000 0000 0000 0000 0000 0111 1111 to
-	//0000 0000 0000 0000 0011 1111 1000 0000 from
-	//0000 0000 0000 0000 0100 0000 0000 0000 drop
-	//0000 0000 0000 0000 1000 0000 0000 0000 promote
-	//0000 0000 1111 1111 0000 0000 0000 0000 subject
-	//1111 1111 0000 0000 0000 0000 0000 0000 capture
-	MOVE_TO_SHIFT = 0,
-	MOVE_FROM_SHIFT = 7,
-	MOVE_DROP_SHIFT = 14,
-	MOVE_PROMOTE_SHIFT = 15,
-	MOVE_SUBJECT_SHIFT = 16,
-	MOVE_CAPTURE_SHIFT = 24,
-	MOVE_TO_MASK = 0b1111111,
-	MOVE_FROM_MASK = MOVE_TO_MASK << MOVE_FROM_SHIFT,
-	MOVE_DROP_MASK = 1 << MOVE_DROP_SHIFT,
-	MOVE_PROMOTE_MASK = 1 << MOVE_PROMOTE_SHIFT,
-	MOVE_SUBJECT_MASK = 0xff << MOVE_SUBJECT_SHIFT,
-	MOVE_CAPTURE_MASK = 0xff << MOVE_CAPTURE_SHIFT,
+    //0000 0000 0000 0000 0000 0000 0111 1111 to
+    //0000 0000 0000 0000 0011 1111 1000 0000 from
+    //0000 0000 0000 0000 0100 0000 0000 0000 drop
+    //0000 0000 0000 0000 1000 0000 0000 0000 promote
+    //0000 0000 1111 1111 0000 0000 0000 0000 subject
+    //1111 1111 0000 0000 0000 0000 0000 0000 capture
+    MOVE_TO_SHIFT = 0,
+    MOVE_FROM_SHIFT = 7,
+    MOVE_DROP_SHIFT = 14,
+    MOVE_PROMOTE_SHIFT = 15,
+    MOVE_SUBJECT_SHIFT = 16,
+    MOVE_CAPTURE_SHIFT = 24,
+    MOVE_TO_MASK = 0b1111111,
+    MOVE_FROM_MASK = MOVE_TO_MASK << MOVE_FROM_SHIFT,
+    MOVE_DROP_MASK = 1 << MOVE_DROP_SHIFT,
+    MOVE_PROMOTE_MASK = 1 << MOVE_PROMOTE_SHIFT,
+    MOVE_SUBJECT_MASK = 0xff << MOVE_SUBJECT_SHIFT,
+    MOVE_CAPTURE_MASK = 0xff << MOVE_CAPTURE_SHIFT,
 };
 
 class Move {
 public:
-	//コンストラクタ
-	Move() : move(0), score(0) {}
-	Move(Square to, Square from) : move(from << MOVE_FROM_SHIFT | to << MOVE_TO_SHIFT), score(0) {}
-	Move(Square to, Square from, bool isDrop) : move(isDrop << MOVE_DROP_SHIFT | from << MOVE_FROM_SHIFT | to << MOVE_TO_SHIFT) {}
-	Move(Square to, Square from, bool isDrop, bool isPromote) : move(isPromote << MOVE_PROMOTE_SHIFT | isDrop << MOVE_DROP_SHIFT | from << MOVE_FROM_SHIFT | to << MOVE_TO_SHIFT) {}
-	Move(Square to, Square from, bool isDrop, bool isPromote, Piece subject) : move(subject << MOVE_SUBJECT_SHIFT | isPromote << MOVE_PROMOTE_SHIFT | isDrop << MOVE_DROP_SHIFT | from << MOVE_FROM_SHIFT | to << MOVE_TO_SHIFT) {}
-	Move(Square to, Square from, bool isDrop, bool isPromote, Piece subject, Piece capture) : move(capture << MOVE_CAPTURE_SHIFT | subject << MOVE_SUBJECT_SHIFT | isPromote << MOVE_PROMOTE_SHIFT | isDrop << MOVE_DROP_SHIFT | from << MOVE_FROM_SHIFT | to << MOVE_TO_SHIFT) {}
+    //コンストラクタ
+    Move() : move(0), score(0) {}
+    Move(Square to, Square from) : move(from << MOVE_FROM_SHIFT | to << MOVE_TO_SHIFT), score(0) {}
+    Move(Square to, Square from, bool isDrop) : move(isDrop << MOVE_DROP_SHIFT | from << MOVE_FROM_SHIFT | to << MOVE_TO_SHIFT) {}
+    Move(Square to, Square from, bool isDrop, bool isPromote) : move(isPromote << MOVE_PROMOTE_SHIFT | isDrop << MOVE_DROP_SHIFT | from << MOVE_FROM_SHIFT | to << MOVE_TO_SHIFT) {}
+    Move(Square to, Square from, bool isDrop, bool isPromote, Piece subject) : move(subject << MOVE_SUBJECT_SHIFT | isPromote << MOVE_PROMOTE_SHIFT | isDrop << MOVE_DROP_SHIFT | from << MOVE_FROM_SHIFT | to << MOVE_TO_SHIFT) {}
+    Move(Square to, Square from, bool isDrop, bool isPromote, Piece subject, Piece capture) : move(capture << MOVE_CAPTURE_SHIFT | subject << MOVE_SUBJECT_SHIFT | isPromote << MOVE_PROMOTE_SHIFT | isDrop << MOVE_DROP_SHIFT | from << MOVE_FROM_SHIFT | to << MOVE_TO_SHIFT) {}
 
-	//表示
-	void print() const
-	{
-		std::cout << SquareToFile[to()] << SquareToRank[to()];
-		std::cout << PieceToStr[subject()];
-		if (isPromote()) fprintf(stdout, "成");
-		else if (isDrop()) fprintf(stdout, "打");
-		std::cout << "(" << SquareToFile[from()] << SquareToRank[from()] << ") ";
-		if (capture() != EMPTY) std::cout << "capture:" << PieceToStr[capture()] << std::endl;
-		else std::cout << std::endl;
-	}
+    //表示
+    void print() const
+    {
+        std::cout << SquareToFile[to()] << SquareToRank[to()];
+        std::cout << PieceToStr[subject()];
+        if (isPromote()) fprintf(stdout, "成");
+        else if (isDrop()) fprintf(stdout, "打");
+        std::cout << "(" << SquareToFile[from()] << SquareToRank[from()] << ") ";
+        if (capture() != EMPTY) std::cout << "capture:" << PieceToStr[capture()] << std::endl;
+        else std::cout << std::endl;
+    }
 
-	void printWithScore() const
-	{
-		std::cout << SquareToFile[to()] << SquareToRank[to()];
-		std::cout << PieceToStr[subject()];
-		if (isPromote()) fprintf(stdout, "成");
-		else if (isDrop()) fprintf(stdout, "打");
-		std::cout << "(" << SquareToFile[from()] << SquareToRank[from()] << ") ";
-		if (capture() != EMPTY) std::cout << "capture:" << PieceToStr[capture()] << " ";
-		std::cout << "score:" << score << std::endl;
-	}
+    void printWithScore() const
+    {
+        std::cout << SquareToFile[to()] << SquareToRank[to()];
+        std::cout << PieceToStr[subject()];
+        if (isPromote()) fprintf(stdout, "成");
+        else if (isDrop()) fprintf(stdout, "打");
+        std::cout << "(" << SquareToFile[from()] << SquareToRank[from()] << ") ";
+        if (capture() != EMPTY) std::cout << "capture:" << PieceToStr[capture()] << " ";
+        std::cout << "score:" << score << std::endl;
+    }
 
-	void printUSI() const
-	{
-		if (isDrop()) {
-			printf("%c*%d%c ", PieceToSfenStr[kind(subject())][0], SquareToFile[to()], SquareToRank[to()] + 'a' - 1);
-		} else {
-			printf("%d%c%d%c", SquareToFile[from()], SquareToRank[from()] + 'a' - 1, SquareToFile[to()], SquareToRank[to()] + 'a' - 1);
-			if (isPromote()) printf("+");
-			printf(" ");
-		}
-	}
-	
-	//要素を取り出す関数ら
-	inline Square to() const { return static_cast<Square>(move & MOVE_TO_MASK); }
-	inline Square from() const { return static_cast<Square>((move & MOVE_FROM_MASK) >> MOVE_FROM_SHIFT); }
-	inline bool isDrop() const { return (move & MOVE_DROP_MASK) != 0; }
-	inline bool isPromote() const { return (move & MOVE_PROMOTE_MASK) != 0; }
-	inline Piece subject() const { return static_cast<Piece>((move & MOVE_SUBJECT_MASK) >> MOVE_SUBJECT_SHIFT); }
-	inline Piece capture() const { return static_cast<Piece>((move & MOVE_CAPTURE_MASK) >> MOVE_CAPTURE_SHIFT); }
+    void printUSI() const
+    {
+        if (isDrop()) {
+            printf("%c*%d%c ", PieceToSfenStr[kind(subject())][0], SquareToFile[to()], SquareToRank[to()] + 'a' - 1);
+        } else {
+            printf("%d%c%d%c", SquareToFile[from()], SquareToRank[from()] + 'a' - 1, SquareToFile[to()], SquareToRank[to()] + 'a' - 1);
+            if (isPromote()) printf("+");
+            printf(" ");
+        }
+    }
 
-	//演算子オーバーロード
-	bool operator==(const Move &right)const { return (from() == right.from() && to() == right.to()); }
-	bool operator<(const Move &right) const { return (score < right.score); }
-	bool operator>(const Move &right) const { return (score > right.score); }
+    //要素を取り出す関数ら
+    inline Square to() const { return static_cast<Square>(move & MOVE_TO_MASK); }
+    inline Square from() const { return static_cast<Square>((move & MOVE_FROM_MASK) >> MOVE_FROM_SHIFT); }
+    inline bool isDrop() const { return (move & MOVE_DROP_MASK) != 0; }
+    inline bool isPromote() const { return (move & MOVE_PROMOTE_MASK) != 0; }
+    inline Piece subject() const { return static_cast<Piece>((move & MOVE_SUBJECT_MASK) >> MOVE_SUBJECT_SHIFT); }
+    inline Piece capture() const { return static_cast<Piece>((move & MOVE_CAPTURE_MASK) >> MOVE_CAPTURE_SHIFT); }
 
-	//探索時にSeacherクラスから気軽にアクセスできるようpublicにおいてるけど
-	int move;
-	int score;
+    //演算子オーバーロード
+    bool operator==(const Move &right)const { return (from() == right.from() && to() == right.to()); }
+    bool operator<(const Move &right) const { return (score < right.score); }
+    bool operator>(const Move &right) const { return (score > right.score); }
+
+    //探索時にSeacherクラスから気軽にアクセスできるようpublicにおいてるけど
+    int move;
+    int score;
 };
 
 //toとfromからなる基本的なMove

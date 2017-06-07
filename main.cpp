@@ -2,6 +2,6 @@
 
 int main()
 {
-	USI usi;
-	usi.loop();
+    USI usi;
+    usi.loop();
 }

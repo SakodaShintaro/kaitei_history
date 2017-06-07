@@ -32,7 +32,7 @@ void USI::loop()
             quit();
         } else if (input == "gameover") {
             gameover();
-		}
+        }
     }
 }
 
@@ -40,9 +40,9 @@ void USI::usi()
 {
     printf("id name kaitei_WCSC27\n");
     printf("id author Sakoda Shintaro\n");
-	printf("option name byoyomi_margin type spin default 800 min 0 max 1000\n");
-	printf("option name random_turn type spin default 0 min 0 max 100\n");
-	printf("option name fixed_depth type spin default 0 min 0 max 100\n");
+    printf("option name byoyomi_margin type spin default 800 min 0 max 1000\n");
+    printf("option name random_turn type spin default 0 min 0 max 100\n");
+    printf("option name fixed_depth type spin default 0 min 0 max 100\n");
     printf("usiok\n");
 }
 
@@ -58,24 +58,24 @@ void USI::setoption()
         std::cin >> input;
         if (input == "name") {
             std::cin >> input;
-			//ここで処理
-			if (input == "byoyomi_margin") {
-				std::cin >> input; //input == "value"となるなず
-				long long byoyomi_margin;
-				std::cin >> byoyomi_margin;
-				searcher_.setByoyomiMargin(byoyomi_margin);
-				return;
-			} else if (input == "random_turn") {
-				std::cin >> input; //input == "value"となるなず
-				unsigned int random_turn;
-				std::cin >> random_turn;
-				searcher_.setRandomTurn(random_turn);
-				return;
-			} else if (input == "fixed_depth") {
-				std::cin >> input; //input == "value"となるはず
-				std::cin >> fixed_depth;
-				return;
-			}
+            //ここで処理
+            if (input == "byoyomi_margin") {
+                std::cin >> input; //input == "value"となるなず
+                long long byoyomi_margin;
+                std::cin >> byoyomi_margin;
+                searcher_.setByoyomiMargin(byoyomi_margin);
+                return;
+            } else if (input == "random_turn") {
+                std::cin >> input; //input == "value"となるなず
+                unsigned int random_turn;
+                std::cin >> random_turn;
+                searcher_.setRandomTurn(random_turn);
+                return;
+            } else if (input == "fixed_depth") {
+                std::cin >> input; //input == "value"となるはず
+                std::cin >> fixed_depth;
+                return;
+            }
         }
     }
 }
@@ -87,7 +87,7 @@ void USI::usinewgame()
 
 void USI::position()
 {
-	std::printf("start position\n");
+    std::printf("start position\n");
     std::string input, sfen;
     std::cin >> input;
     if (input == "startpos") {
@@ -99,7 +99,7 @@ void USI::position()
             sfen += " ";
         }
     }
-	std::printf("before load_sfen\n");
+    std::printf("before load_sfen\n");
     position_.load_sfen(sfen);
     std::cin >> input;  //input == "moves" or "go"となる
     if (input != "go")
@@ -119,7 +119,7 @@ void USI::position()
 void USI::go()
 {
     std::string input;
-	long long btime, wtime, byoyomi = 0, binc = 0, winc = 0;
+    long long btime, wtime, byoyomi = 0, binc = 0, winc = 0;
     std::cin >> input;
     if (input == "ponder") {
         //ponderの処理
@@ -142,16 +142,16 @@ void USI::go()
         }
         //ここまで持ち時間の設定
         //ここから思考部分
-		if (fixed_depth > 0) {
-			searcher_.think_fixed_depth(position_, fixed_depth);
-			return;
-		}
-		if (byoyomi != 0) searcher_.think(position_, byoyomi);
-		else searcher_.think(position_, binc);
+        if (fixed_depth > 0) {
+            searcher_.think_fixed_depth(position_, fixed_depth);
+            return;
+        }
+        if (byoyomi != 0) searcher_.think(position_, byoyomi);
+        else searcher_.think(position_, binc);
         return;
     } else if (input == "infinite") {
         //stop来るまで思考し続ける
-		searcher_.think(position_, 9999999999999999999);
+        searcher_.think(position_, 9999999999999999999);
     } else if (input == "mate") {
         //詰み探索
         std::cin >> input;
@@ -189,36 +189,36 @@ void USI::gameover()
         //負け
     } else if (input == "draw") {
         //引き分け
-		return;
-	}
+        return;
+    }
 }
 
 Move stringToMove(std::string input)
 {
-	std::map<char, Piece> charToPiece = {
-		{'P', PAWN},
-		{'L', LANCE},
-		{'N', KNIGHT},
-		{'S', SILVER},
-		{'G', GOLD},
-		{'B', BISHOP},
-		{'R', ROOK},
-	};
-	Square to, from;
-	bool isDrop, isPromote;
-	Piece subject;
+    std::map<char, Piece> charToPiece = {
+        {'P', PAWN},
+        {'L', LANCE},
+        {'N', KNIGHT},
+        {'S', SILVER},
+        {'G', GOLD},
+        {'B', BISHOP},
+        {'R', ROOK},
+    };
+    Square to, from;
+    bool isDrop, isPromote;
+    Piece subject;
     if ('A' <= input[0] && input[0] <= 'Z') { //持ち駒を打つ手
         to = FRToSquare[input[2] - '0'][input[3] - 'a' + 1];
-		isDrop = true;
-		isPromote = false;
-		subject = charToPiece[input[0]];
-		return dropMove(to, subject);
+        isDrop = true;
+        isPromote = false;
+        subject = charToPiece[input[0]];
+        return dropMove(to, subject);
     } else { //盤上の駒を動かす手
         from = FRToSquare[input[0] - '0'][input[1] - 'a' + 1];
-        to   = FRToSquare[input[2] - '0'][input[3] - 'a' + 1];
-		isDrop = false;
+        to = FRToSquare[input[2] - '0'][input[3] - 'a' + 1];
+        isDrop = false;
         if (input.size() == 5 && input[4] == '+') isPromote = true;
-		else isPromote = false;
-		return fullMove(to, from, isDrop, isPromote, EMPTY, EMPTY);
+        else isPromote = false;
+        return fullMove(to, from, isDrop, isPromote, EMPTY, EMPTY);
     }
 }

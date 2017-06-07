@@ -6,21 +6,21 @@
 
 class Move;
 
-class HashTable{
+class HashTable {
 public:
-	HashTable() { setSize(256); }
-	HashEntry* find(long long key);
-	void save(long long key, Move move, int depth);
-	void setSize(int megabytes);
-	double hashfull() { return static_cast<double>(hashfull_) / static_cast<double>(size_) * 1000.0; }
-	void clear() { table_.clear(); setSize(256); }
+    HashTable() { setSize(256); }
+    HashEntry* find(long long key);
+    void save(long long key, Move move, int depth);
+    void setSize(int megabytes);
+    double hashfull() { return static_cast<double>(hashfull_) / static_cast<double>(size_) * 1000.0; }
+    void clear() { table_.clear(); setSize(256); }
 private:
     //ハッシュエントリのvector:これが本体
     std::vector<HashEntry> table_;
 
     //ハッシュテーブルの要素数
-	//これtable.size()では?
-	//上位ソフトだといくつかのエントリをまとめて一つにしてるからこれが別に必要なんだろうか
+    //これtable.size()では?
+    //上位ソフトだといくつかのエントリをまとめて一つにしてるからこれが別に必要なんだろうか
     size_t size_;
 
     //ハッシュキーからテーブルのインデックスを求めるためのマスク

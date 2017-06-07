@@ -10,7 +10,7 @@
 class USIGoOption;
 class USIinfo;
 
-class USI{
+class USI {
 public:
     void loop();
     void usi();
