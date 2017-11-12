@@ -7,10 +7,10 @@ ReleaseされているものはWindows10 64bit環境でのみ動作確認済み�
 使用しているOSがWindowsであれば上方の"Release"タブを選択し、必要な実行ファイルおよび評価パラメータファイルをダウンロードしてお使いください。
 
 ソースコードはgccでコンパイルすることもできます。コンパイルしたいバージョンのディレクトリに入り、makeコマンドを実行してください。
-例)kaiteiをダウンロードしてきてSDT5バージョンをコンパイルする
-  git clone http://github.com/SakodaShintaro/kaitei
-  cd ./kaitei/kaitei_SDT5
-  make
+例)kaiteiをダウンロードしてきてSDT5バージョンをコンパイルする  
+  git clone http://github.com/SakodaShintaro/kaitei  
+  cd ./kaitei/kaitei_SDT5  
+  make  
 
 評価パラメータはReleaseタブからダウンロードしてください。
 
